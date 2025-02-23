@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Увійти</title>
+    <link rel="stylesheet" href="../../static/css/login_style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="../../media/text_logo.png" alt="Логотип">
+        </div>
+        <button class="home-btn" onclick="window.location.href='../index.html'">На головну →</button>
+    </header>
+
+    <main class="login-container">
+        <h1>Увійти в систему</h1>
+        <form class="login-form">
+            <label for="login">Логін</label>
+            <input type="text" id="login" name="login" placeholder="Введіть логін" required>
+
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" placeholder="Введіть пароль" required>
+
+            <p>Ще немає акаунту? <a href="registration.html">Зареєструватись</a></p>
+
+            <button type="submit" class="submit-btn">Увійти</button>
+        </form>
+    </main>
+</body>
+</html>
