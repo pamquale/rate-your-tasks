@@ -68,7 +68,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL", "postgresql://postgres:eZeRKqLDVOamIdoPRtynFbwPyfWjKZjF@metro.proxy.rlwy.net:24936/railway"),
+        default=os.getenv(
+            "DATABASE_URL", "postgresql://postgres:eZeRKqLDVOamIdoPRtynFbwPyfWjKZjF@metro.proxy.rlwy.net:24936/railway"),
         conn_max_age=600
     )
 }
@@ -110,7 +111,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "main" / "static",
 ]
 
 # Default primary key field type
