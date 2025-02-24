@@ -1,0 +1,35 @@
+name: rate-your-tasks
+services:
+  tasks_db:
+    image: postgres:17.4
+    container_name: tasks_db
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+  web:
+    build: .
+    container_name: django_app
+    restart: always
+    depends_on:
+      - tasks_db
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app  # Монтуємо код у контейнер
+    command: ["sh", "-c", "echo 'Контейнер Django готовий'"]
+
+volumes:
+  postgres_data:
