@@ -1,33 +1,53 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Увійти</title>
-    <link rel="stylesheet" href="{% static 'main/css/login_style.css' %}">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'main/css/auth_styles.css' %}">
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            <img src="{% static 'main/media/text_logo.png'%}" alt="Логотип">
+            <img src="{% static 'main/media/text_logo.png' %}" alt="Логотип">
         </div>
-        <button class="home-btn" onclick="window.location.href='../index.html'">На головну →</button>
+        <button class="home-btn" onclick="window.location.href='{% url 'home' %}'">Home page →</button>
     </header>
+    <div class="center">
+        <h1>Login</h1>
 
-    <main class="login-container">
-        <h1>Увійти в систему</h1>
-        <form class="login-form">
-            <label for="login">Логін</label>
-            <input type="text" id="login" name="login" placeholder="Введіть логін" required>
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <center><h4 style="color: firebrick;">{{ message }}</h4></center>
+                {% else %}
+                    <center><h4 style="color: dodgerblue;">{{ message }}</h4></center>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
 
-            <label for="password">Пароль</label>
-            <input type="password" id="password" name="password" placeholder="Введіть пароль" required>
+        <form method="POST">
+            {% csrf_token %}
 
-            <p>Ще немає акаунту? <a href="registration.html">Зареєструватись</a></p>
+            <div class="txt_field">
+                <input type="text" required name="username">
+                <span></span>
+                <label>Username</label>
+            </div>
 
-            <button type="submit" class="submit-btn">Увійти</button>
+            <div class="txt_field">
+                <input type="password" required name="password">
+                <span></span>
+                <label>Password</label>
+            </div>
+
+            <input type="submit" value="Увійти">
+            <div class="signup_link">
+                Not a member? <a href="{% url 'register' %}">Signup</a>
+                <p>Forgot your Password? <a href="{% url 'forgot-password' %}">Reset Password</a></p>
+            </div>
         </form>
-    </main>
+    </div>
 </body>
 </html>
