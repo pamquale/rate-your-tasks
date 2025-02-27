@@ -21,6 +21,8 @@ ALLOWED_HOSTS = []
 
 SITE_ID = 1
 
+SITE_ID = 1
+
 
 # Application definition
 
@@ -45,7 +47,13 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',  # all auth backend
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # standard django backend
+    'allauth.account.auth_backends.AuthenticationBackend',  # all auth backend
+]
+
 MIDDLEWARE = [
+    'allauth.account.middleware.AccountMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -124,11 +132,20 @@ USE_TZ = True
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'core', 'static'),
+    os.path.join(BASE_DIR, 'core', 'static'),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

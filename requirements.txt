@@ -2,12 +2,15 @@ asgiref==3.8.1
 certifi==2025.1.31
 charset-normalizer==3.4.1
 cryptography==44.0.1
+cryptography==44.0.1
 Django==5.1.6
 dj-database-url==2.3.0
+django-allauth==65.4.1
 django-allauth==65.4.1
 docker==7.1.0
 idna==3.10
 iniconfig==2.0.0
+oauthlib==3.2.2
 oauthlib==3.2.2
 packaging==24.2
 pillow==11.1.0
@@ -17,8 +20,10 @@ psycopg2-binary==2.9.10
 pytest==8.3.4
 pytest-django==4.10.0
 pyjwt==2.10.1
+pyjwt==2.10.1
 python-dotenv==1.0.1
 requests==2.32.3
+requests-oauthlib==2.0.0
 requests-oauthlib==2.0.0
 setuptools==70.0.0
 sqlparse==0.5.3
