@@ -1,4 +1,5 @@
 {% load static %}
+{% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,7 +62,10 @@
                 <label>Password</label>
             </div>
             
-            <input type="submit" value="Зареєструватись">
+            <input type="submit" value="Register">
+            <br><button onclick="window.location.href = '{% provider_login_url 'google' %}' " type="button" class="login-with-google-btn" >
+                <b>Sign up with Google</b>
+            </button>
             <div class="signup_link">
                 Already have an account? <a href="{% url 'login' %}">Login</a>
             </div>
