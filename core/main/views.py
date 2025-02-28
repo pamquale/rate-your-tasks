@@ -14,6 +14,7 @@ from .models import PasswordReset
 def Home(request):
     return render(request, 'main/index.html')
 
+
 def RegisterView(request):
 
     if request.method == "POST":
@@ -43,7 +44,7 @@ def RegisterView(request):
             new_user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
-                email=email, 
+                email=email,
                 username=username,
                 password=password
             )
@@ -52,30 +53,40 @@ def RegisterView(request):
 
     return render(request, 'Authorization/register.html')
 
+
 def LoginView(request):
 
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
+        remember_me = request.POST.get("remember_me", False)
 
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
+            if remember_me:  # type: ignore
+                # Используем стандартное время сессии
+                request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+            else:
+                # Закрытие сессии при закрытии браузера
+                request.session.set_expiry(0)
 
             return redirect('home')
-        
+
         else:
             messages.error(request, "Invalid login credentials")
             return redirect('login')
 
     return render(request, 'Authorization/login.html')
 
+
 def LogoutView(request):
 
     logout(request)
 
     return redirect('login')
+
 
 def ForgotPassword(request):
 
@@ -88,17 +99,18 @@ def ForgotPassword(request):
             new_password_reset = PasswordReset(user=user)
             new_password_reset.save()
 
-            password_reset_url = reverse('reset-password', kwargs={'reset_id': new_password_reset.reset_id})
+            password_reset_url = reverse(
+                'reset-password', kwargs={'reset_id': new_password_reset.reset_id})
 
             full_password_reset_url = f'{request.scheme}://{request.get_host()}{password_reset_url}'
 
             email_body = f'Reset your password using the link below:\n\n\n{full_password_reset_url}'
-        
+
             email_message = EmailMessage(
-                'Reset your password', # email subject
+                'Reset your password',  # email subject
                 email_body,
-                settings.EMAIL_HOST_USER, # email sender
-                [email] # email  receiver 
+                settings.EMAIL_HOST_USER,  # email sender
+                [email]  # email  receiver
             )
 
             email_message.fail_silently = True
@@ -112,6 +124,7 @@ def ForgotPassword(request):
 
     return render(request, 'Authorization/forgot_password.html')
 
+
 def PasswordResetSent(request, reset_id):
 
     if PasswordReset.objects.filter(reset_id=reset_id).exists():
@@ -120,6 +133,7 @@ def PasswordResetSent(request, reset_id):
         # redirect to forgot password page if code does not exist
         messages.error(request, 'Invalid reset id')
         return redirect('forgot-password')
+
 
 def ResetPassword(request, reset_id):
 
@@ -138,9 +152,11 @@ def ResetPassword(request, reset_id):
 
             if len(password) < 5:
                 passwords_have_error = True
-                messages.error(request, 'Password must be at least 5 characters long')
+                messages.error(
+                    request, 'Password must be at least 5 characters long')
 
-            expiration_time = password_reset_id.created_when + timezone.timedelta(minutes=10)
+            expiration_time = password_reset_id.created_when + \
+                timezone.timedelta(minutes=10)
 
             if timezone.now() > expiration_time:
                 passwords_have_error = True
@@ -161,9 +177,8 @@ def ResetPassword(request, reset_id):
                 # redirect back to password reset page and display errors
                 return redirect('reset-password', reset_id=reset_id)
 
-    
     except PasswordReset.DoesNotExist:
-        
+
         # redirect to forgot password page if code does not exist
         messages.error(request, 'Invalid reset id')
         return redirect('forgot-password')

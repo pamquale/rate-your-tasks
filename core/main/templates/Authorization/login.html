@@ -43,6 +43,13 @@
                 <label>Password</label>
             </div>
 
+            <div>
+                <label>
+                    <input type="checkbox" name="remember_me"> Запам'ятати мене
+                </label>
+            </div>
+            
+
             <input type="submit" value="Login">
             <br><button onclick="window.location.href = '{% provider_login_url 'google' %}' " type="button" class="login-with-google-btn" >
                 <b>Sign in with Google</b>

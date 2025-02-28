@@ -165,3 +165,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "rateyourtasks@gmail.com"
 EMAIL_HOST_PASSWORD = "ckir ybmf mqjz xwvk"
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
