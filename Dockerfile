@@ -1,10 +1,12 @@
 FROM python:3.11
 
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
 # Встановлюємо робочу директорію в контейнері
 WORKDIR /app
 
 # Копіюємо всі файли у контейнер
-COPY . /app
+COPY core /app/
 
 # Встановлюємо залежності
 RUN pip install --no-cache-dir -r requirements.txt

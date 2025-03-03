@@ -1,7 +1,7 @@
 name: rate-your-tasks
 services:
   tasks_db:
-    image: postgres:17.4
+    image: postgres:17
     container_name: tasks_db
     restart: always
     env_file:
@@ -10,26 +10,35 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - "8080:8080"
+      - ./postgres/scripts/db-script.sh:/docker-entrypoint-initdb.d/db-script.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      interval: 10s
+      retries: 5
 
   web:
     build: .
     container_name: django_app
     restart: always
     depends_on:
-      - tasks_db
+      tasks_db:
+        condition: service_healthy  
     env_file:
       - .env
     ports:
       - "8000:8000"
     volumes:
-      - .:/app  # Монтуємо код у контейнер
-    command: ["sh", "-c", "echo 'Контейнер Django готовий'"]
+      - ./core:/app  
+    command: >
+      sh -c "python manage.py migrate &&
+              python manage.py collectstatic --noinput &&
+            gunicorn core.wsgi:application --bind 0.0.0.0:8000"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
 
 volumes:
   postgres_data:

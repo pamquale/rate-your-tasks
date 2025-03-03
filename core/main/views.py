@@ -53,7 +53,6 @@ def RegisterView(request):
 
     return render(request, 'Authorization/register.html')
 
-
 def LoginView(request):
 
     if request.method == "POST":
