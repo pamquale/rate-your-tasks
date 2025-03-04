@@ -18,7 +18,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SITE_ID = 1
+SITE_ID = 2
 
 # Application definition
 
@@ -85,8 +85,8 @@ DATABASES = {
         "NAME": os.environ.get("DB_NAME"),
         "USER": os.environ.get("DB_USER"),
         "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "HOST": os.environ.get("HOST"),
-        "PORT": os.environ.get("PORT"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": os.environ.get("DB_PORT"),
     }
 }
 
@@ -130,7 +130,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'core', 'static'),
     os.path.join(BASE_DIR, 'core', 'static'),
 ]
 
