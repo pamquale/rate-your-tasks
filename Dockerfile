@@ -1,7 +1,5 @@
 FROM python:3.11
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
 # Встановлюємо робочу директорію в контейнері
 WORKDIR /app
 
