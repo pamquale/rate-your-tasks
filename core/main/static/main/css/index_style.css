@@ -1,0 +1,206 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: #fff;
+    color: #333;
+}
+
+.container {
+    max-width: calc(100% - 240px);
+    margin: 0 auto; 
+    padding: 0 20px;
+}
+
+/* Відступи секцій */
+.about, .advantages, .team {
+    padding: 50px 0;
+}
+
+/* Хедер */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 120px;
+    background: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+/* Логотип */
+.logo img {
+    width: 150px;
+    height: auto;
+}
+
+/* Кнопка логіна */
+.login-btn{
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+    border: 2px solid #2055E5;
+    border-radius: 10px;
+    color: #2055E5;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.login-btn:hover {
+    background: #2055E5;
+    color: #fff;
+}
+
+/* Перша секція */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 120px 0 50px; 
+}
+
+/* Текст у секції hero */
+.hero-text {
+    max-width: 50%;
+    text-align: left;
+}
+
+/* Зображення в секції hero */
+.hero-image {
+    width: 350px;
+    height: 350px;
+    background: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+/* Кнопки в секції hero */
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 28px;
+}
+
+/* Кнопка реєстрації */
+.register-btn {
+    display: flex;
+    justify-content: center;
+    background-color: #2055E5;
+    border: 2px solid #2055E5;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.register-btn:hover {
+    background: darkblue;
+    border: 2px solid darkblue;
+}
+
+/* Друга секція */
+.about h2 {
+    margin-bottom: 15px;
+}
+
+.features {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.feature {
+    display: flex;
+    width: 100%;
+    margin: 20px 0;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.feature-img {
+    width: 150px;
+    height: 150px;
+    background: #ddd;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+
+/* Третя секція про переваги */
+.advantage-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.advantage {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;
+}
+
+.icon {
+    font-size: 30px;
+}
+
+/* Четвера секція про команду */
+.team-members {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.member {
+    text-align: center;
+    width: 200px;
+}
+
+/* Фото */
+.member-img {
+    width: 120px;
+    height: 120px;
+    background: #eee;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+}
+
+/* Прізвище ім'я */
+.member p:first-of-type {
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+/* Роль */
+.member p:last-of-type {
+    font-size: 14px;
+    color: gray;
+    margin: 0;
+}
+
+/* Футер */
+.footer {
+    background: #f8f8f8;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 120px;
+    box-sizing: border-box;
+}

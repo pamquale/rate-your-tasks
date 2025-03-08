@@ -1,0 +1,64 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'main/css/auth_styles.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="{% static 'main/media/text_logo.png' %}" alt="Логотип">
+        </div>
+        <button class="home-btn" onclick="window.location.href='{% url 'home' %}'">Home page →</button>
+    </header>
+    <div class="center">
+        <h1>Login</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <center><h4 style="color: firebrick;">{{ message }}</h4></center>
+                {% else %}
+                    <center><h4 style="color: dodgerblue;">{{ message }}</h4></center>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="txt_field">
+                <input type="text" required name="username">
+                <span></span>
+                <label>Username</label>
+            </div>
+
+            <div class="txt_field">
+                <input type="password" required name="password">
+                <span></span>
+                <label>Password</label>
+            </div>
+
+            <div>
+                <label>
+                    <input type="checkbox" name="remember_me"> Запам'ятати мене
+                </label>
+            </div>
+            
+
+            <input type="submit" value="Login">
+            <br><button onclick="window.location.href = '{% provider_login_url 'google' %}' " type="button" class="login-with-google-btn" >
+                <b>Sign in with Google</b>
+            </button>
+            <div class="signup_link">
+                Not a member? <a href="{% url 'register' %}">Signup</a>
+                <p>Forgot your Password? <a href="{% url 'forgot-password' %}">Reset Password</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

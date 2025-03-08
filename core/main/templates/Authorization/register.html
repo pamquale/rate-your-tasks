@@ -1,0 +1,77 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реєстрація</title>
+    <link rel="stylesheet" href="{% static 'main/css/auth_styles.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="{% static 'main/media/text_logo.png' %}" alt="Логотип">
+        </div>
+        <button class="home-btn" onclick="window.location.href='{% url 'home' %}'">Home page →</button>
+    </header>
+
+    <main class="registration-container">
+        <h1>Register</h1>
+
+      {% if messages %}
+          {% for message in messages %}
+              {% if message.tags == 'error' %}
+                  <center><h4 style="color: firebrick;">{{ message }}</h4></center>
+              {% else %}
+                  <center><h4 style="color: dodgerblue;">{{ message }}</h4></center>
+              {% endif %}
+          {% endfor %}
+      {% endif %}
+
+        <form class="registration-form" method="POST">
+            {% csrf_token %}
+            
+            <div class="txt_field">
+                <input type="text" required name="first_name">
+                <span></span>
+                <label>First Name</label>
+            </div>
+
+            <div class="txt_field">
+                <input type="text" required name="last_name">
+                <span></span>
+                <label>Second Name</label>
+            </div>
+
+            <div class="txt_field">
+                <input type="text" required name="username">
+                <span></span>
+                <label>Username</label>
+            </div>
+
+            <div class="txt_field">
+                <input type="email" required name="email">
+                <span></span>
+                <label>Email</label>
+            </div>
+
+            <div class="txt_field">
+                <input type="password" required name="password">
+                <span></span>
+                <label>Password</label>
+            </div>
+
+            
+            
+            <input type="submit" value="Register">
+            <br><button onclick="window.location.href = '{% provider_login_url 'google' %}' " type="button" class="login-with-google-btn" >
+                <b>Sign up with Google</b>
+            </button>
+            <div class="signup_link">
+                Already have an account? <a href="{% url 'login' %}">Login</a>
+            </div>
+        </form>
+    </main>
+</body>
+</html>
