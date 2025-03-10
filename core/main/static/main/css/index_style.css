@@ -13,6 +13,10 @@ body {
     padding: 0 20px;
 }
 
+h1 {
+    font-size: 60px;
+}
+
 /* Відступи секцій */
 .about, .advantages, .team {
     padding: 50px 0;
@@ -36,7 +40,7 @@ body {
 
 /* Логотип */
 .logo img {
-    width: 150px;
+    width: 50px;
     height: auto;
 }
 
@@ -152,11 +156,10 @@ body {
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    width: 200px;
 }
 
-.icon {
-    font-size: 30px;
+#icon {
+    font-size: 46px !important;
 }
 
 /* Четвера секція про команду */

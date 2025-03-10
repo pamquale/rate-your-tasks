@@ -5,19 +5,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Реєстрація</title>
+    <title>Sign up</title>
     <link rel="stylesheet" href="{% static 'main/css/auth_styles.css' %}">
+    <link rel="icon" href="{% static 'main/media/favicon.ico' %}" type="image/x-icon">
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            <img src="{% static 'main/media/text_logo.png' %}" alt="Логотип">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'main/media/logo.png' %}" alt="Logo">
+            </a>
         </div>
-        <button class="home-btn" onclick="window.location.href='{% url 'home' %}'">Home page →</button>
     </header>
 
     <main class="registration-container">
-        <h1>Register</h1>
+        <h1>Sign up</h1>
 
       {% if messages %}
           {% for message in messages %}
@@ -69,7 +71,7 @@
                 <b>Sign up with Google</b>
             </button>
             <div class="signup_link">
-                Already have an account? <a href="{% url 'login' %}">Login</a>
+                Already have an account? <a href="{% url 'login' %}">Sign in</a>
             </div>
         </form>
     </main>

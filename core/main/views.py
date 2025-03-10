@@ -11,7 +11,28 @@ from .models import PasswordReset
 
 @login_required
 def Home(request):
-    return render(request, 'main/index.html')
+
+    features = [
+        {"title": "Overloaded team members", "description": "Team overload leads to decreased productivity and burnout. Our system helps identify overloaded members by analyzing their work activity."},
+        {"title": "Productivity charts", "description": "Productivity charts show the team's work dynamics and help identify areas for improvement. Our system helps make informed decisions to enhance work efficiency."},
+        {"title": "Comparison of performance analysis at different stages", "description": "Compare team performance at different project stages to identify trends and areas for improvement. The analysis helps understand what works efficiently and what needs changes."},
+    ]
+
+    advantages = [
+        {"icon": "show_chart", "title": "Automated analysis", "description": "The system evaluates team performance in real time with no extra effort."},
+        {"icon": "cognition", "title": "Load optimization", "description": "Helps identify overloaded members and balance the workflow."},
+        {"icon": "productivity", "title": "Data-driven decisions", "description": "Provides clear data to improve team efficiency and productivity."},
+    ]
+
+    team_members = [
+        {"name": "1", "role": "Project manager"},
+        {"name": "2", "role": "Backend developer"},
+        {"name": "3", "role": "Backend developer"},
+        {"name": "4", "role": "Frontend developer"},
+        {"name": "5", "role": "Frontend developer"},
+    ]
+
+    return render(request, 'main/index.html', {'advantages': advantages, 'features': features, 'team_members': team_members})
 
 
 def RegisterView(request):

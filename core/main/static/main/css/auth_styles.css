@@ -1,5 +1,6 @@
 body {
     font-family: Arial, sans-serif;
+    overflow: hidden;
     margin: 0;
     padding: 0;
     text-align: center;
@@ -9,16 +10,18 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    padding-top: 40px;
 }
 
 /* Хедер */
 .header {
+    height: 60px;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 15px 120px;
     background: #fff;
@@ -28,30 +31,30 @@ body {
 }
 
 /* Логотип */
-.logo img {
-    width: 150px;
-    height: auto;
-}
-
-/* Кнопка На головну */
-.home-btn {
+.logo a {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #fff;
-    border: 2px solid #2055E5;
-    border-radius: 10px;
-    color: #2055E5;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 10px 20px;
-    text-decoration: none;
-    transition: 0.3s;
 }
 
-.home-btn:hover {
-    background: #2055E5;
-    color: #fff;
+.logo img {
+    width: 45px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.logo img:hover {
+    transform: scale(1.1);
+}
+
+.registration-container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
 }
 
 .center {

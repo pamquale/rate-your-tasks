@@ -1,30 +1,26 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Головна</title>
+    <title>Home</title>
     <link rel="stylesheet" href="{% static 'main/css/index_style.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/sidebar_style.css' %}">
+    <link rel="icon" href="{% static 'main/media/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <img src="{% static 'main/media/text_logo.png' %}" alt="Логотип">
-        </div>
-        
-        <button class="login-btn" onclick="window.location.href='{% url 'login' %}'">Увійти →</button>
-    </header>
-
+    {% include "includes/sidebar.html" %}
     <div class="container">
         <!-- Перша секція коротко про сам проєкт -->
         <section class="hero">
             <div class="hero-text">
                 <h1>Rate your tasks</h1>
-                <p>Опис – короткий опис проєкту. Використати 1-2 речення в 1-3 рядки.</p>
+                <p>The team performance evaluation system analyzes work efficiency, automates feedback, and helps improve team productivity.</p>
                 <div class="buttons">
-                    <button class="register-btn" onclick="window.location.href='{% url 'register' %}'">Зареєструватися →</button>
-                    <button class="login-btn" onclick="window.location.href='{% url 'login' %}'">Увійти</button>
+                    <button class="register-btn" onclick="window.location.href='{% url 'register' %}'">Sign up →</button>
+                    <button class="login-btn" onclick="window.location.href='{% url 'login' %}'">Sign in</button>
                 </div>
             </div>
             <div class="hero-image"></div>
@@ -32,15 +28,15 @@
 
         <!-- Друга секція опис функцій -->
         <section class="about">
-            <h2>Заголовок – про що проєкт</h2>
-            <p>Опис – основний сенс. Використати 1-2 речення в 1-3 рядки, вирівнювання по центру.</p>
+            <h1>Maximum team productivity</h1>
+            <p>The system analyzes team performance and automates feedback. It helps improve work efficiency and optimize team interaction.</p>
             <div class="features">
                 {% for feature in features %}
                 <div class="feature">
                     <div class="feature-img"></div>
                     <div class="feature-text">
-                        <h3>Підзаголовок. Кегль шрифта може бути більше</h3>
-                        <p>Опис в 3-5 рядків</p>
+                        <h3>{{ feature.title }}</h3>
+                        <p>{{ feature.description }}</p>
                     </div>
                 </div>
                 {% endfor %}
@@ -49,13 +45,15 @@
 
         <!-- Третя секція в чому перемаги проєкту -->
         <section class="advantages">
-            <h2>Заголовок – про переваги</h2>
+            <h1>Key system benefits</h1>
             <div class="advantage-list">
                 {% for advantage in advantages %}
                 <div class="advantage">
-                    <div class="icon">⏰</div>
-                    <h3>Підзаголовок</h3>
-                    <p>Використати 1 речення в 1-3 рядки</p>
+                    <div class="icon">
+                        <span class="nav-icon material-symbols-rounded" id="icon" style="font-size: 48px;">{{ advantage.icon }}</span>
+                    </div>
+                    <h3>{{ advantage.title }}</h3>
+                    <p>{{ advantage.description }}</p>
                 </div>
                 {% endfor %}
             </div>
@@ -63,7 +61,7 @@
 
         <!-- Четвера секція команда яка розробляла проєкт -->
         <section class="team">
-            <h2>Команда</h2>
+            <h1>Team</h1>
             <div class="team-members">
                 {% for member in team_members %}
                 <div class="member">
@@ -76,14 +74,16 @@
         </section>
     </div>
 
-    <a href="{% url 'logout' %}">Logout</a>
 
     <footer class="footer">
         <div class="logo">
-            <img src="{% static 'main/media/text_logo.png' %}" alt="Логотип">
+            <img src="{% static 'main/media/logo.png' %}" alt="Логотип">
         </div>
         <p>© 2025 Rate your tasks</p>
+        <a href="{% url 'logout' %}">Logout</a>
     </footer>
+
+    <script src="{% static 'main/js/script_sidebar.js' %}"></script>
 
 </body>
 </html>
