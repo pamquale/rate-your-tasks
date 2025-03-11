@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="{% static 'main/css/profile_style.css' %}">
+    <link rel="icon" href="{% static 'main/media/favicon.ico' %}" type="image/x-icon">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'main/media/logo.png' %}" alt="Logo">
+            </a>
+        </div>
+    </header>
+
+    <main class="profile-container">
+        <!-- Кнопка для зміни даних -->
+        <button class="ChangeDataButton" id="changeDataBtn">Change Data</button>
+
+        <!-- Модальне вікно -->
+        <div id="changeDataModal" class="ChangeData" style="display: none;">
+            <div class="Title">Change data</div>
+
+            <div class="FormField"><label for="position">Position</label><input id="position" type="text" placeholder="Enter position"></div>
+            <div class="FormField"><label for="teamRole">Team Role</label><input id="teamRole" type="text" placeholder="Enter team role"></div>
+            <div class="FormField"><label for="company">Company</label><input id="company" type="text" placeholder="Enter company"></div>
+            <div class="FormField"><label for="location">Location</label><input id="location" type="text" placeholder="Enter location"></div>
+            <div class="FormField"><label for="workExperience">Work Experience</label><input id="workExperience" type="text" placeholder="Enter work experience"></div>
+            <div class="FormField"><label for="keyTechnologies">Key technologies</label><input id="keyTechnologies" type="text" placeholder="Enter key technologies"></div>
+            <div class="FormField"><label for="contacts">Contacts</label><input id="contacts" type="text" placeholder="Enter contacts"></div>
+
+            <button class="SaveButton" id="saveButton">Save</button>
+        </div>
+
+        <!-- Профіль -->
+        <section class="Profile">
+            <div class="NameSurnameUsername">
+                <span class="name">Name Surname</span>
+                <span class="username">@Username</span>
+            </div>
+            <div class="LocationOn">
+                <!-- Іконка місцезнаходження (можна замінити на SVG через static) -->
+                <svg width="24" height="24" ...></svg>
+            </div>
+            <div class="London">📍London</div>
+
+            <div class="PositionFrontend">Position: Frontend Developer</div>
+            <div class="TeamRole">Team Role: Performer / Team Lead</div>
+            <div class="Company">Company: TechSoft</div>
+
+            <!-- Аватар -->
+            <div class="GenericAvatar">
+                <svg width="156" height="152" viewBox="0 0 156 152" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- SVG-аватар тут -->
+                </svg>
+                <input type="file" id="uploadAvatar" accept="image/*" style="display: none;">
+                <button id="changeAvatarBtn" class="change-avatar-btn">+</button>
+            </div>
+        </section>
+
+        <!-- Додаткова інформація -->
+        <section class="AdditionalInfo">
+            <div class="Additional">📊 Additional:</div>
+            <div class="WorkExperience">Work experience: 3 years</div>
+            <div class="KeyTechnologies">Key technologies: React, TypeScript, Redux</div>
+            <div class="Contacts">Contacts: ivan.petrenko@email.com</div>
+        </section>
+    </main>
+
+    <script src="{% static 'main/js/script_profile.js' %}"></script>
+</body>
+</html>

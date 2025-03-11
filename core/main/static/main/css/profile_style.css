@@ -1,0 +1,373 @@
+        body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: white;
+    position: relative;
+}
+
+.ChangeDataButton {
+    position: absolute;
+    top: 20px;
+    right: 1px;
+    height: 46px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 2px solid #2055E5;
+    background: white;
+    color: #2055E5;
+    font-size: 16px;
+    font-family: 'ABeeZee', sans-serif;
+    font-weight: 400;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+/* Модальне вікно, без прозорості, сірий фон */
+#changeDataModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(227, 227, 227, 1); /* Тепер фон сірий і непрозорий */
+    display: none;
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Тіло модального вікна */
+.ChangeData {
+    padding: 20px;
+    background-color: #E3E3E3; /* Колір, схожий на сірі блоки */
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Стиль для кнопки збереження */
+.SaveButton {
+    background-color: #2055E5;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.SaveButton:hover {
+    background-color: #005BB5;
+}
+/* Загальний стиль для кожного поля введення в модальному вікні */
+.FormField {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Стиль для назви поля (label) */
+.FormField label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Стиль для полів введення */
+.FormField input {
+    width: 100%;
+    padding: 12px 20px; /* Однакові внутрішні відступи для всіх полів */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* Враховує padding в розміри елемента */
+}
+
+/* Стиль для модального вікна */
+.ChangeData {
+    padding: 20px;
+    background-color: #E3E3E3; /* Колір сірого фону */
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box; /* Враховує padding в розміри елемента */
+}
+
+/* Кнопка збереження */
+.SaveButton {
+    background-color: #2055E5;
+    color: white;
+    padding: 12px 20px; /* Однакові відступи для кнопки */
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.SaveButton:hover {
+    background-color: #005BB5;
+}
+
+.Profile, .Rectangles {
+    margin-top: 0; /* Спочатку немає зміщення */
+}
+
+.Profile.show, .Rectangles.show {
+    margin-top: 300px; /* Зсув вниз під модальне вікно */
+}
+
+/* Загальний стиль для модального вікна */
+.ChangeData {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px; /* Максимальна ширина для вікна */
+    margin: auto;
+    display: none;
+    position: relative;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Додано тінь для модального вікна */
+}
+
+/* Заголовок модального вікна */
+.Title {
+    font-size: 32px; /* Зменшено розмір шрифта */
+    text-align: center;
+    color: #2055E5;
+    margin-bottom: 20px; /* Зменшено відступ */
+}
+
+/* Стиль для кожного поля в модальному вікні */
+.FormField {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Стиль для назви поля (label) */
+.FormField label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Стиль для полів введення */
+.FormField input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px; /* Відстань між полями */
+}
+
+/* Кнопка збереження */
+.SaveButton {
+    background-color: #2055E5; /* Синій фон */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease; /* Ефект при наведенні */
+}
+
+.SaveButton:hover {
+    background-color: #0033A0; /* Темніший колір при наведенні */
+}
+
+/* Клас для кожного текстового поля */
+.InputText {
+    width: 100%;
+    height: 39px;
+    background: #FEFEFE;
+    border-radius: 10px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #B3B3B3;
+}
+
+.Rectangle37 {
+  width: 535px;
+  height: 520px;
+  background: #E3E3E3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+}
+
+.InputText {
+  width: 100%;
+  height: 39px;
+  background: #FEFEFE;
+  border-radius: 10px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 20px;
+  border: 1px solid #B3B3B3;
+}
+
+.SaveButton {
+  background-color: #2055E5;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.Profile {
+    width: 1440px;
+    height: 1024px;
+    position: relative;
+    background: white;
+}
+
+ .NameSurnameUsername {
+      width: 375px;
+      position: absolute;
+      left: 367px;
+      top: 131px;
+      text-align: center;
+      color: black;
+      font-size: 36px;
+      font-weight: 400;
+      text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      font-family: Inter, sans-serif;
+      line-height: 1.2;
+    }
+
+    .username {
+      font-size: 24px;
+      display: block;
+    }
+
+.LocationOn {
+    position: absolute;
+    left: 442px;
+    top: 364px;
+}
+
+.London {
+    position: absolute;
+    left: 466px;
+    top: 368px;
+    text-align: center;
+    color: black;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.GenericAvatar {
+    position: absolute;
+    left: 193px;
+    top: 195px;
+}
+ .GenericAvatar {
+            position: relative;
+            width: 156px;
+            height: 152px;
+            border-radius: 50%;
+            background-color: #007AFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .GenericAvatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .change-avatar-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: #fff;
+            border: 2px solid #007AFF;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            color: #007AFF;
+        }
+
+        .change-avatar-btn:hover {
+            background-color: #007AFF;
+            color: white;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+.PositionFrontend,
+.TeamRole,
+.Company {
+    position: absolute;
+    left: 442px;
+    text-align: center;
+    color: black;
+    font-size: 24px;
+    font-family: Roboto, sans-serif;
+    font-weight: 400;
+    line-height: 32px;
+}
+
+.PositionFrontend { top: 220px; }
+.TeamRole { top: 260px; }
+.Company { top: 300px; }
+
+.AdditionalInfo {
+    width: 80%; /* Встановлено 80% ширини для більшої адаптивності */
+    max-width: 900px; /* Максимальна ширина */
+    position: absolute;
+    top: 396px; /* Позиціонуємо під локацією "London" */
+    left: 50%; /* Центруємо по горизонталі */
+    transform: translateX(-50%); /* Коригуємо для точного вирівнювання по центру */
+    text-align: left; /* Вирівнювання тексту по лівому краю */
+    color: black;
+    font-size: 20px; /* Зменшено розмір шрифта */
+    font-family: Roboto, sans-serif;
+    font-weight: 400;
+    line-height: 28px; /* Зменшено висоту рядка для компактнішого вигляду */
+    word-wrap: break-word;
+    display: flex; /* Встановлюємо flex */
+    flex-direction: column; /* Розташування елементів по вертикалі */
+    gap: 8px; /* Відстань між елементами */
+    z-index: 1; /* Забезпечує, щоб блок був під модальним вікном */
+}
+
+.AdditionalInfo div {
+    margin: 5px 0; /* Відстань між рядками */
+}
+
+.AdditionalInfo div[contenteditable="true"] {
+    border-bottom: 1px solid #ccc; /* Лінія під редагованими блоками */
+    padding: 5px;
+    min-width: 200px;
+    font-size: 18px; /* Зменшено розмір шрифта для більш компактного вигляду */
+}
+

@@ -15,11 +15,11 @@ def DiagramView(request):
 
 @login_required
 def AnalitycView(request):
-    return render(request, 'Analytic/....')
+    return render(request, 'Analytic/analytic.html')
 
 @login_required
 def ProfileView(request):
-    return render(request, 'Profile/.....')
+    return render(request, 'Profile/profile.html')
 
 @login_required
 def Home(request):
