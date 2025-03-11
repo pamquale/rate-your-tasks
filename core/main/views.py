@@ -10,6 +10,18 @@ from django.urls import reverse
 from .models import PasswordReset
 
 @login_required
+def DiagramView(request):
+    return render(request, 'Diagram/diagram.html')
+
+@login_required
+def AnalitycView(request):
+    return render(request, 'Analytic/....')
+
+@login_required
+def ProfileView(request):
+    return render(request, 'Profile/.....')
+
+@login_required
 def Home(request):
 
     features = [

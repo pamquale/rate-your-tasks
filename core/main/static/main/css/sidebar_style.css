@@ -8,6 +8,7 @@
 
 .sidebar {
   position: fixed;
+  z-index: 1000;
   width: 270px;
   margin: 16px;
   border-radius: 16px;

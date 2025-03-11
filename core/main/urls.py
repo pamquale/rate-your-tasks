@@ -11,4 +11,8 @@ urlpatterns = [
          views.PasswordResetSent, name='password-reset-sent'),
     path('reset-password/<str:reset_id>/',
          views.ResetPassword, name='reset-password'),
+     path('diagram/', views.DiagramView, name="diagram"),
+     path('analytic/', views.AnalitycView, name="analytic"),
+     path('profile/', views.ProfileView, name="profile"),
+
 ]
