@@ -95,7 +95,7 @@ function createTask() {
     let completion = document.getElementById("end-date").value;
     let members = document.getElementById("members").value;
     let priority = document.getElementById("priority").value;
-    let type = document.getElementById("type").value;
+    let hours = document.getElementById("hours").value;
     let difficulty = document.getElementById("difficulty").value;
 
     if (!taskName || !start || !deadline || !completion) {
@@ -127,7 +127,7 @@ function createTask() {
                 completion,
                 members,
                 priority,
-                type,
+                hours,
                 difficulty
             };
             editingTaskId = null;
@@ -147,7 +147,7 @@ function createTask() {
             completion,
             members,
             priority,
-            type,
+            hours,
             difficulty
         };
         currentProject.tasks.push(task);
@@ -327,7 +327,7 @@ function openInfoModal(task) {
     document.getElementById('end-date-info').textContent = formatDate(task.completion) || 'No value';
     document.getElementById('members-info').textContent = task.members || 'No value';
     document.getElementById('priority-info').textContent = task.priority || 'No value';
-    document.getElementById('type-info').textContent = task.type || 'No value';
+    document.getElementById('hours-info').textContent = task.hours || 'No value';
     document.getElementById('difficulty-info').textContent = task.difficulty || 'No value';
 
     document.getElementById('infoModal').setAttribute('data-task-id', task.id);
@@ -350,7 +350,7 @@ function editTask() {
         document.getElementById('end-date').value = task.completion.toISOString().split('T')[0];
         document.getElementById('members').value = task.members;
         document.getElementById('priority').value = task.priority;
-        document.getElementById('type').value = task.type;
+        document.getElementById('hours').value = task.hours;
         document.getElementById('difficulty').value = task.difficulty;
 
         // Закриваємо модальне вікно інформації
@@ -477,5 +477,3 @@ function removeTaskRow(taskId) {
 function hideModal() {
     document.getElementById('infoModal').style.display = 'none';
 }
-
-
