@@ -1,21 +1,18 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
     <link rel="stylesheet" href="{% static 'main/css/profile_style.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/sidebar_style.css' %}">
     <link rel="icon" href="{% static 'main/media/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <a href="{% url 'home' %}">
-                <img src="{% static 'main/media/logo.png' %}" alt="Logo">
-            </a>
-        </div>
-    </header>
+
+    {% include "includes/sidebar.html" %}
 
     <main class="profile-container">
         <!-- Кнопка для зміни даних -->
@@ -46,8 +43,7 @@
                 <!-- Іконка місцезнаходження (можна замінити на SVG через static) -->
                 <svg width="24" height="24" ...></svg>
             </div>
-            <div class="London">📍London</div>
-
+            <div class="London">📍London</div>         
             <div class="PositionFrontend">Position: Frontend Developer</div>
             <div class="TeamRole">Team Role: Performer / Team Lead</div>
             <div class="Company">Company: TechSoft</div>
@@ -64,7 +60,10 @@
 
         <!-- Додаткова інформація -->
         <section class="AdditionalInfo">
-            <div class="Additional">📊 Additional:</div>
+            <div class="Additional">
+                <span class="nav-icon material-symbols-rounded">bar_chart</span> Additional:
+            </div>
+            
             <div class="WorkExperience">Work experience: 3 years</div>
             <div class="KeyTechnologies">Key technologies: React, TypeScript, Redux</div>
             <div class="Contacts">Contacts: ivan.petrenko@email.com</div>
@@ -72,5 +71,6 @@
     </main>
 
     <script src="{% static 'main/js/script_profile.js' %}"></script>
+    <script src="{% static 'main/js/script_sidebar.js' %}"></script>
 </body>
 </html>
