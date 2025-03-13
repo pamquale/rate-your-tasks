@@ -5,7 +5,9 @@ import uuid
 class User(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=150, unique=True)
-    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=150, null=True, blank=True)
+    last_name = models.CharField(max_length=150, null=True, blank=True)
+    email = models.EmailField(unique=True)  
     password = models.CharField(max_length=255)
     position = models.CharField(max_length=100, null=True, blank=True)
     team_role = models.CharField(max_length=100, null=True, blank=True)
@@ -22,14 +24,13 @@ class User(models.Model):
 
 class Project(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
     start_date = models.DateTimeField()
-    # description = models.TextField(null=True, blank=True)
     owner = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="projects")
+        User, on_delete=models.CASCADE, related_name='projects')
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Task(models.Model):
@@ -44,13 +45,13 @@ class Task(models.Model):
     start_date = models.DateTimeField()
     deadline = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
-    members = models.ManyToManyField(User, related_name="tasks")
+    members = models.ManyToManyField(User, related_name='tasks')
     priority = models.CharField(
         max_length=10, choices=PRIORITY_CHOICES, default='medium')
     difficulty = models.CharField(max_length=255)
     hours = models.IntegerField()
     project = models.ForeignKey(
-        Project, on_delete=models.CASCADE, related_name="tasks")
+        Project, on_delete=models.CASCADE, related_name='tasks')
 
     def __str__(self):
         return self.name

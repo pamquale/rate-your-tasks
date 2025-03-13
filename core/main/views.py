@@ -96,11 +96,9 @@ def LoginView(request):
 
         if user is not None:
             login(request, user)
-            if remember_me:  # type: ignore
-                # Используем стандартное время сессии
+            if remember_me:  
                 request.session.set_expiry(settings.SESSION_COOKIE_AGE)
             else:
-                # Закрытие сессии при закрытии браузера
                 request.session.set_expiry(0)
 
             return redirect('home')
