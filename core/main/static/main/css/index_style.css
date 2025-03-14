@@ -1,5 +1,4 @@
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     text-align: center;
@@ -17,31 +16,15 @@ h1 {
     font-size: 60px;
 }
 
-/* Відступи секцій */
-.about, .advantages, .team {
-    padding: 50px 0;
-}
-
-/* Хедер */
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 120px;
-    background: #fff;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    z-index: 1000;
-}
-
 /* Логотип */
 .logo img {
     width: 50px;
     height: auto;
+}
+
+/* Відступи секцій */
+.about, .advantages, .team {
+    padding: 50px 0;
 }
 
 /* Кнопка логіна */
@@ -68,7 +51,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 120px 0 50px; 
+    padding: 50px 0 50px; 
 }
 
 /* Текст у секції hero */
@@ -79,12 +62,11 @@ h1 {
 
 /* Зображення в секції hero */
 .hero-image {
-    width: 350px;
-    height: 350px;
+    width: 600px;
+    height: 600px;
     background: #eee;
     display: flex;
     justify-content: center;
-    align-items: center;
     border-radius: 10px;
 }
 
@@ -137,9 +119,10 @@ h1 {
 }
 
 .feature-img {
-    width: 150px;
-    height: 150px;
-    background: #ddd;
+    width: 590px;
+    height: 496px;
+    object-fit: cover; 
+    object-position: left;
     margin-right: 20px;
     border-radius: 10px;
 }
