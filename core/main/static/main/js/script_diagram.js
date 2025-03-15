@@ -44,8 +44,6 @@ function formatDate(date) {
            (date.getMonth() + 1).toString().padStart(2, '0') + '.' +
            date.getFullYear();
 }
-
-// Функція створення нового проекту
 function createProject() {
     let name = document.getElementById("projectName").value;
     let startDate = document.getElementById("projectStartDate").value;
@@ -68,8 +66,24 @@ function createProject() {
         select.value = name;
         loadProject();
         closeModal('projectModal'); // Закриваємо модальне вікно після створення проекту
+
+        // Перевіряємо, чи є проєкти, і відповідно показуємо/ховаємо кнопку "Create Task"
+        toggleCreateTaskButton();
     }
 }
+function toggleCreateTaskButton() {
+    let createTaskBtn = document.getElementById("createTaskBtn");
+    let select = document.getElementById("projectSelect");
+
+    if (select.options.length > 0) {
+        createTaskBtn.style.display = "block";  // Показати кнопку
+    } else {
+        createTaskBtn.style.display = "none";   // Сховати кнопку
+    }
+}
+document.addEventListener("DOMContentLoaded", function () {
+    toggleCreateTaskButton();
+});
 
 // Функція завантаження вибраного проєкту
 function loadProject() {
