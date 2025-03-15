@@ -63,7 +63,7 @@ class TaskAnalytics(models.Model):
     workload = models.IntegerField()
 
 class PasswordReset(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     reset_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     created_when = models.DateTimeField(auto_now_add=True)
 
@@ -72,9 +72,15 @@ class PasswordReset(models.Model):
 
 
 class GanttChart(models.Model):
-    task = models.ForeignKey(
-        Task, on_delete=models.CASCADE, related_name='gantt_entries')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='gantt_entries')
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     progress = models.FloatField(default=0)
     status = models.CharField(max_length=255)
+
+    class Meta:
+        unique_together = ('task', 'start_date')
+
+    def __str__(self):
+        return f"{self.task.name} ({self.status})"
+

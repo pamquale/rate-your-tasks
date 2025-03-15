@@ -8,6 +8,54 @@ from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.urls import reverse
 from .models import PasswordReset
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from .models import Task, GanttChart, TaskAnalytics
+
+def get_analytics_data(request):
+    analytics = TaskAnalytics.objects.all().values("task__name", "completed_on_time", "workload")
+    return JsonResponse(list(analytics), safe=False)
+
+@csrf_exempt
+def save_analytics_data(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            task_id = data.get("task_id")
+            completed_on_time = data.get("completed_on_time")
+            workload = data.get("workload")
+
+            task = Task.objects.get(id=task_id)
+            analytics, created = TaskAnalytics.objects.update_or_create(
+                task=task,
+                defaults={"completed_on_time": completed_on_time, "workload": workload}
+            )
+
+            return JsonResponse({"message": "Data saved successfully!", "created": created})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+@csrf_exempt
+def save_gantt_chart(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            task_id = data.get("task_id")
+            start_date = data.get("start_date")
+            end_date = data.get("end_date")
+            progress = data.get("progress")
+            status = data.get("status")
+
+            task = Task.objects.get(id=task_id)
+            gantt_entry, created = GanttChart.objects.update_or_create(
+                task=task,
+                defaults={"start_date": start_date, "end_date": end_date, "progress": progress, "status": status}
+            )
+
+            return JsonResponse({"message": "Data saved successfully!", "created": created})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
 
 @login_required
 def DiagramView(request):
