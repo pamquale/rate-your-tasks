@@ -1,4 +1,4 @@
-        body {
+body {
     margin: 0;
     padding: 0;
     font-family: 'Inter', sans-serif;
@@ -265,7 +265,7 @@
     top: 364px;
 }
 
-.London {
+.UserLocation {
     position: absolute;
     left: 466px;
     top: 368px;
@@ -323,7 +323,7 @@
         input[type="file"] {
             display: none;
         }
-.PositionFrontend,
+.Position,
 .TeamRole,
 .Company {
     position: absolute;
@@ -336,7 +336,7 @@
     line-height: 32px;
 }
 
-.PositionFrontend { top: 220px; }
+.Position { top: 220px; }
 .TeamRole { top: 260px; }
 .Company { top: 300px; }
 
@@ -370,4 +370,3 @@
     min-width: 200px;
     font-size: 18px; /* Зменшено розмір шрифта для більш компактного вигляду */
 }
-

@@ -3,14 +3,14 @@ x-environment-defaults: &environment-defaults
   DB_NAME: "tasks"
   DB_USER: "postgres"
   DB_PASSWORD: "postgres"
-  DB_HOST: "postgres"
+  DB_HOST: "postgres-db"
   DB_PORT: 5432
   CELERY_BROKER_URL: "redis://redis:6379/0"
   CELERY_RESULT_BACKEND: "redis://redis:6379/0"
   SECRET_KEY: "secret"
 
 services:
-  postgres:
+  postgres-db:
     image: postgres:latest
     container_name: postgres
     environment:
@@ -43,7 +43,7 @@ services:
     networks:
       - tasks-network
     depends_on:
-      postgres:
+      postgres-db:
          condition: service_healthy
     environment:
       <<: *environment-defaults
@@ -76,7 +76,7 @@ services:
     command: celery -A core worker --loglevel=info
     depends_on:
       - redis
-      - postgres
+      - postgres-db
     networks:
       - tasks-network
     environment:
@@ -88,7 +88,7 @@ services:
     command: celery -A core beat --loglevel=info
     depends_on:
       - redis
-      - postgres
+      - postgres-db
     networks:
       - tasks-network
     environment:

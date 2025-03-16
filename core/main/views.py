@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -12,6 +13,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import Task, GanttChart, TaskAnalytics
+
+User = get_user_model()
 
 def get_analytics_data(request):
     analytics = TaskAnalytics.objects.all().values("task__name", "completed_on_time", "workload")
@@ -67,7 +70,9 @@ def AnalitycView(request):
 
 @login_required
 def ProfileView(request):
-    return render(request, 'Profile/profile.html')
+    user = request.user
+    return render(request, 'Profile/profile.html', {'user': user})
+
 
 @login_required
 def Home(request):
@@ -135,40 +140,44 @@ def Home(request):
 
 
 def RegisterView(request):
-
     if request.method == "POST":
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-
-        user_data_has_error = False
+        position = request.POST.get('position')
+        team_role = request.POST.get('team_role')
+        company = request.POST.get('company')
+        location = request.POST.get('location')
 
         if User.objects.filter(username=username).exists():
-            user_data_has_error = True
             messages.error(request, "Username already exists")
+            return redirect('register')
 
         if User.objects.filter(email=email).exists():
-            user_data_has_error = True
             messages.error(request, "Email already exists")
+            return redirect('register')
 
         if len(password) < 5:
-            user_data_has_error = True
             messages.error(request, "Password must be at least 5 characters")
-
-        if user_data_has_error:
             return redirect('register')
-        else:
-            new_user = User.objects.create_user(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                username=username,
-                password=password
-            )
-            messages.success(request, "Account created. Login now")
-            return redirect('login')
+
+        new_user = User.objects.create_user(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            username=username,
+            password=password,
+            position=position,
+            team_role=team_role,
+            company=company,
+            location=location
+        )
+        new_user.save()
+
+        messages.success(request, "Account created. Login now")
+        return redirect('login')
 
     return render(request, 'Authorization/register.html')
 
