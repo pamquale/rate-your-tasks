@@ -54,62 +54,6 @@
     </div>
 </div>
 
-   {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagram</title>
-    <link rel="stylesheet" href="{% static 'main/css/diagram_style.css' %}">
-    <link rel="stylesheet" href="{% static 'main/css/sidebar_style.css' %}">
-    <link rel="icon" href="{% static 'main/media/favicon.ico' %}" type="image/x-icon">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
-</head>
-<body>
-
-    {% include "includes/sidebar.html" %}
-
-    <div class="content">
-        <!-- Верхушка з поп-апом та кнопками -->
-        <div class="top-bar">
-            <select id="projectSelect"></select>
-            <div class="button-container">
-                <button id="createProjectBtn">Create project</button>
-                <button id="createTaskBtn">Create task</button>
-            </div>
-        </div>
-        <!-- Контейнер таблиці -->
-        <div class="table-container" style="display: none;">
-            <table class="gantt-table">
-                <thead>
-                    <tr id="dateHeader">
-                        <th>Task</th>
-                    </tr>
-                </thead>
-                <tbody id="taskTable">
-                    <!-- Нові задачі будуть додаватися сюди -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Модальне вікно для створення проєкта -->
-   <div id="projectModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('projectModal')">&times;</span>
-        <h2 class="modal-title">Create project</h2>
-
-        <label for="projectName" class="modal-label">Project name</label>
-        <input type="text" id="projectName" class="modal-input" placeholder="Enter project name">
-
-        <label for="projectStartDate" class="modal-label">Start date</label>
-        <input type="date" id="projectStartDate" class="modal-input">
-
-        <button id="saveProject" class="modal-button">Save</button>
-    </div>
-</div>
-
     <!-- Модальне вікно для створення завдання -->
 <div id="taskModal" class="modal">
     <div class="modal-content">
@@ -142,60 +86,6 @@
 </div>
 
 
-
-<!-- Модальне вікно для відображення інформації -->
-<div id="infoModal" class="modal-overlay" style="display: none;">
-    <div class="modal-container">
-        <div class="modal-header">
-            <h2 class="modal-title">Task Information</h2>
-            <button class="close-btn" onclick="closeModal('infoModal')">×</button>
-        </div>
-        <div class="modal-body">
-            <div class="form-row">
-                <label for="task-name-info" class="label">Task Name</label>
-                <div id="task-name-info" class="value">Value</div>
-            </div>
-            <div class="form-row">
-                <label for="start-date-info" class="label">Start</label>
-                <div id="start-date-info" class="value">Value Date</div>
-            </div>
-            <div class="form-row">
-                <label for="deadline-info" class="label">Deadline</label>
-                <div id="deadline-info" class="value">Value Date</div>
-            </div>
-            <div class="form-row">
-                <label for="end-date-info" class="label">End</label>
-                <div id="end-date-info" class="value">Value</div>
-            </div>
-            <div class="form-row">
-                <label for="members-info" class="label">Members</label>
-                <div id="members-info" class="value">Value</div>
-            </div>
-            <div class="form-row">
-                <label for="priority-info" class="label">Priority</label>
-                <div id="priority-info" class="value">Value</div>
-            </div>
-            <div class="form-row">
-                <label for="hours-info" class="label">Hours</label>
-                <div id="hours-info" class="value">Value</div>
-            </div>
-            <div class="form-row">
-                <label for="difficulty-info" class="label">Difficulty</label>
-                <div id="difficulty-info" class="value">Value</div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-edit" onclick="editTask()">Edit</button>
-             <button class="btn-delete" onclick="deleteTask()">Delete</button>
-        </div>
-    </div>
-</div>
-
-
-    <script src="{% static 'main/js/script_diagram.js' %}" defer></script>
-    <script src="{% static 'main/js/script_sidebar.js' %}"></script>
-</body>
-</html>
 
 <!-- Модальне вікно для відображення інформації -->
 <div id="infoModal" class="modal-overlay" style="display: none;">

@@ -25,24 +25,21 @@ def update_task(request):
             data = json.loads(request.body)
             task_id = data.get("task_id")
 
-            # Перевірка чи існує задача з таким ID
             task = Task.objects.filter(id=task_id).first()
             if not task:
                 return JsonResponse({"error": "Task not found."}, status=404)
 
-            # Оновлення даних задачі
-            Task.objects.filter(id=task_id).update(
-                name=data.get("name", task.name),
-                start_date=data.get("start", task.start_date),
-                deadline=data.get("deadline", task.deadline),
-                end_date=data.get("completion", task.end_date),
-                priority=data.get("priority", task.priority),
-                hours=data.get("hours", task.hours),
-                difficulty=data.get("difficulty", task.difficulty)
-            )
+            task.name = data.get("name", task.name)
+            task.start_date = data.get("start", task.start_date)
+            task.deadline = data.get("deadline", task.deadline)
+            task.end_date = data.get("completion", task.end_date)
+            task.priority = data.get("priority", task.priority)
+            task.hours = data.get("hours", task.hours)
+            task.difficulty = data.get("difficulty", task.difficulty)
+            task.save()
 
-            # Оновлення учасників
-            task.members.set(User.objects.filter(username__in=data.get("members", "").split(",")))
+            members_usernames = data.get("members", "").split(",")
+            task.members.set(User.objects.filter(username__in=members_usernames))
 
             return JsonResponse({"message": "Task updated successfully!"})
 
@@ -50,6 +47,7 @@ def update_task(request):
             return JsonResponse({"error": str(e)}, status=400)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
 
 @csrf_exempt
 @login_required

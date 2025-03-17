@@ -1,14 +1,11 @@
-// Об'єкт для зберігання всіх проєктів
 let projects = {};
 let currentProject = null;
 
-// Обробники подій для кнопок
 document.getElementById("createProjectBtn").addEventListener("click", () => openModal('projectModal'));
 document.getElementById("createTaskBtn").addEventListener("click", () => openModal('taskModal'));
 document.getElementById("saveProject").addEventListener("click", createProject);
 document.getElementById("projectSelect").addEventListener("change", loadProject);
 
-// Запобігання повторному виклику createTask()
 document.getElementById("taskForm").addEventListener("submit", function(event) {
     event.preventDefault();
     createTask();
@@ -20,16 +17,14 @@ document.getElementById('infoModal').addEventListener('click', function(event) {
     }
 });
 
-// Функція відкриття модального вікна
 function openModal(modalId) {
     let modal = document.getElementById(modalId);
     if (modal) {
-        modal.style.display = 'block'; // Відкриваємо модальне вікно
-        document.body.classList.add('modal-open'); // Додаємо затемнення фону
+        modal.style.display = 'block'; 
+        document.body.classList.add('modal-open'); 
     }
 }
 
-// Функція закриття модального вікна
 function closeModal(modalId) {
     let modal = document.getElementById(modalId);
     if (modal) {
@@ -38,7 +33,6 @@ function closeModal(modalId) {
     }
 }
 
-// Функція форматування дати у формат "ДД.ММ.РРРР"
 function formatDate(date) {
     if (!(date instanceof Date)) {
         try {
@@ -106,7 +100,7 @@ function fetchProjects(callback) {
                 }
 
                 toggleCreateTaskButton();
-                if (callback) callback(); // Викликаємо колбек після завантаження
+                if (callback) callback(); 
             }
         })
         .catch(error => console.error("Помилка завантаження проєктів:", error));
@@ -131,14 +125,13 @@ function createProject() {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken") // CSRF-токен для безпеки
+            "X-CSRFToken": getCookie("csrftoken") 
         },
         body: JSON.stringify(projectData)
     })
     .then(response => response.json())
     .then(data => {
         if (data.project) {
-            // Додаємо проєкт до списку на сторінці
             projects[data.project.title] = {
                 id: data.project.id,
                 startDate: new Date(data.project.start_date),
@@ -153,7 +146,7 @@ function createProject() {
 
             select.value = data.project.title;
             loadProject();
-            closeModal('projectModal'); // Закриваємо модальне вікно
+            closeModal('projectModal'); 
             toggleCreateTaskButton();
         } else {
             alert("Error: " + data.error);
@@ -167,16 +160,15 @@ function toggleCreateTaskButton() {
     let select = document.getElementById("projectSelect");
 
     if (select.options.length > 0) {
-        createTaskBtn.style.display = "block";  // Показати кнопку
+        createTaskBtn.style.display = "block";  
     } else {
-        createTaskBtn.style.display = "none";   // Сховати кнопку
+        createTaskBtn.style.display = "none";   
     }
 }
 document.addEventListener("DOMContentLoaded", function () {
     toggleCreateTaskButton();
 });
 
-// Функція завантаження вибраного проєкту
 function loadProject() {
     let projectName = document.getElementById("projectSelect").value;
     currentProject = projects[projectName] || null;
@@ -188,7 +180,7 @@ function loadProject() {
         document.querySelector(".table-container").style.display = "none";
     }
     
-    toggleCreateTaskButton(); // Переконуємось, що кнопка не зникне
+    toggleCreateTaskButton(); 
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -203,14 +195,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            this.dataset.submitted = "true"; // Запобігаємо повторному відправленню
+            this.dataset.submitted = "true"; 
 
             await createTask();
 
-            this.dataset.submitted = ""; // Скидаємо блокування після завершення
+            this.dataset.submitted = ""; 
         });
 
-        taskForm.dataset.listenerAdded = "true"; // Запобігаємо повторному додаванню обробника
+        taskForm.dataset.listenerAdded = "true"; 
     }
 });
 
@@ -230,7 +222,7 @@ async function createTask() {
         return;
     }
 
-    taskForm.dataset.submitted = "true"; // Запобігаємо повторному сабміту
+    taskForm.dataset.submitted = "true"; 
 
     let taskData = {
         project_id: currentProject.id,
@@ -262,7 +254,7 @@ async function createTask() {
         if (data.task_id) {
             fetchProjects(() => {
                 closeModal("taskModal");
-                loadProject(); // Оновлення відображення задач
+                loadProject(); 
                 updateTableRange();
             });
         } else {
@@ -271,7 +263,7 @@ async function createTask() {
     } catch (error) {
         console.error("Помилка запиту:", error);
     } finally {
-        taskForm.dataset.submitted = ""; // Скидаємо блокування після завершення
+        taskForm.dataset.submitted = ""; 
     }
 }
 
@@ -283,7 +275,6 @@ function clearTaskForm() {
     document.getElementById("end-date").value = "";
 }
 
-// Функція перевірки та оновлення діапазону дат у таблиці
 function updateTableRange() {
     if (!currentProject) return;
 
@@ -307,13 +298,12 @@ function updateTableRange() {
 
         if (maxEndDate > currentEndDate) {
             console.log("Оновлюємо таблицю, оскільки новий кінець перевищує поточний діапазон");
-            drawTable(); // Очищаємо і малюємо таблицю заново
-            currentProject.tasks.forEach(task => renderTaskRow(task)); // Додаємо завдання заново
+            drawTable(); 
+            currentProject.tasks.forEach(task => renderTaskRow(task)); 
         }
     }
 }
 
-// Функція побудови таблиці з датами
 function drawTable() {
     let dateRow = document.getElementById("dateHeader");
     dateRow.innerHTML = "<th>Task</th>";
@@ -322,7 +312,7 @@ function drawTable() {
     startDate.setHours(0, 0, 0, 0);
 
     let maxEndDate = new Date(startDate);
-    maxEndDate.setDate(maxEndDate.getDate() + 18); // Мінімальний діапазон 18 днів
+    maxEndDate.setDate(maxEndDate.getDate() + 18); 
 
     currentProject.tasks.forEach(task => {
         let taskDeadline = new Date(task.deadline);
@@ -346,12 +336,11 @@ function drawTable() {
     }
 
     let taskTable = document.getElementById("taskTable");
-    taskTable.innerHTML = ""; // Очищаємо таблицю
+    taskTable.innerHTML = ""; 
 
-    // **Додаємо 10 порожніх рядків**
     for (let i = 0; i < 10; i++) {
         let row = document.createElement("tr");
-        row.setAttribute("data-empty", "true"); // Позначаємо, що це порожній рядок
+        row.setAttribute("data-empty", "true"); 
 
         let taskNameCell = document.createElement("td");
         taskNameCell.textContent = "";
@@ -368,34 +357,23 @@ function drawTable() {
     document.querySelector(".table-container").style.display = "block";
 }
 
-
-// Функція відображення одного рядка завдання у таблиці
 function renderTaskRow(task) {
-    let taskTable = document.getElementById("taskTable");
-    let rows = taskTable.getElementsByTagName("tr");
-
-    let row = Array.from(rows).find(r => r.firstChild.textContent === "");
+    let row = document.querySelector(`tr[data-task-id='${task.id}']`);
     if (!row) {
         row = document.createElement("tr");
-        taskTable.appendChild(row);
+        row.setAttribute("data-task-id", task.id);
+        document.getElementById("taskTable").appendChild(row);
     }
 
     row.innerHTML = "";
-    row.setAttribute('data-task-id', task.id);
-
     let taskNameCell = document.createElement("td");
     taskNameCell.textContent = task.name;
     row.appendChild(taskNameCell);
 
     let projectStart = new Date(currentProject.startDate);
-    projectStart.setHours(0, 0, 0, 0);
-
     let taskStart = new Date(task.start);
-    taskStart.setHours(0, 0, 0, 0);
     let taskDeadline = new Date(task.deadline);
-    taskDeadline.setHours(0, 0, 0, 0);
     let taskCompletion = new Date(task.completion);
-    taskCompletion.setHours(0, 0, 0, 0);
 
     let dateHeaders = document.querySelectorAll("#dateHeader th");
     let daysCount = dateHeaders.length - 1;
@@ -405,49 +383,35 @@ function renderTaskRow(task) {
         let taskBar = document.createElement("div");
         let currentDate = new Date(projectStart);
         currentDate.setDate(projectStart.getDate() + i);
-        currentDate.setHours(0, 0, 0, 0);
 
-        // Логіка кольорових смуг (існуючий код)
-        if (currentDate.getTime() === taskStart.getTime() ||
-            (currentDate.getTime() >= taskStart.getTime() && currentDate.getTime() <= taskDeadline.getTime())) {
+        if (currentDate >= taskStart && currentDate <= taskDeadline) {
             taskBar.classList.add("yellow");
         }
-        if (currentDate.getTime() >= taskStart.getTime() && currentDate.getTime() <= taskCompletion.getTime()) {
+        if (currentDate >= taskStart && currentDate <= taskCompletion) {
             let greenBar = document.createElement("div");
             greenBar.classList.add("green");
             taskBar.appendChild(greenBar);
         }
-        if (currentDate.getTime() > taskDeadline.getTime() && currentDate.getTime() <= taskCompletion.getTime()) {
+        if (currentDate > taskDeadline && currentDate <= taskCompletion) {
             taskBar.classList.add("red");
         }
 
-        // Додаємо обробник подій для смуги
-        taskBar.addEventListener('click', function(event) {
-            let tr = event.target.closest('tr');
-            let taskId = tr.getAttribute('data-task-id');
-            let task = currentProject.tasks.find(t => t.id == taskId);
-            if (task) {
-                openInfoModal(task);
-            }
-        });
-
+        taskBar.addEventListener("click", () => openInfoModal(task));
         cell.appendChild(taskBar);
         row.appendChild(cell);
     }
 }
 
 document.getElementById("taskForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Запобігає перезавантаженню сторінки
-    createTask(); // Викликає функцію створення завдання
+    event.preventDefault(); 
+    createTask(); 
 });
-// Дані завдань (ти будеш додавати їх самостійно або брати з іншого джерела)
+
 const tasks = [
     { name: 'Task 1', startDate: '2025-03-01', deadline: '2025-03-10', endDate: '2025-03-09', members: 'John, Sarah' },
     { name: 'Task 2', startDate: '2025-03-05', deadline: '2025-03-12', endDate: '2025-03-10', members: 'Michael, Emily' },
-    // Ти можеш додавати більше завдань
 ];
 
-// Функція для відображення модального вікна з інформацією про завдання
 function openInfoModal(task) {
     document.getElementById('task-name-info').textContent = task.name || 'No value';
     document.getElementById('start-date-info').textContent = formatDate(task.start) || 'No value';
@@ -465,46 +429,116 @@ function openInfoModal(task) {
 let editingTaskId = null;
 function editTask() {
     let infoModal = document.getElementById('infoModal');
-    let taskId = infoModal.getAttribute('data-task-id'); // Отримуємо ID завдання
+    let taskId = infoModal.getAttribute('data-task-id'); 
 
     let task = currentProject.tasks.find(t => t.id == taskId);
     if (task) {
         editingTaskId = taskId;
 
-        // Заповнюємо форму редагування
-        document.getElementById('task-name').value = task.name;
-        document.getElementById('start-date').value = task.start.toISOString().split('T')[0];
-        document.getElementById('deadline').value = task.deadline.toISOString().split('T')[0];
-        document.getElementById('end-date').value = task.completion.toISOString().split('T')[0];
-        document.getElementById('members').value = task.members;
-        document.getElementById('priority').value = task.priority;
-        document.getElementById('hours').value = task.hours;
-        document.getElementById('difficulty').value = task.difficulty;
+        document.getElementById('task-name-info').innerHTML = `<input type="text" id="edit-task-name" value="${task.name}">`;
+        document.getElementById('start-date-info').innerHTML = `<input type="date" id="edit-start-date" value="${task.start}">`;
+        document.getElementById('deadline-info').innerHTML = `<input type="date" id="edit-deadline" value="${task.deadline}">`;
+        document.getElementById('end-date-info').innerHTML = `<input type="date" id="edit-end-date" value="${task.completion || ''}">`;
+        document.getElementById('members-info').innerHTML = `<input type="text" id="edit-members" value="${task.members}">`;
+        document.getElementById('priority-info').innerHTML = `
+            <select id="edit-priority">
+                <option value="low" ${task.priority === "low" ? "selected" : ""}>Low</option>
+                <option value="medium" ${task.priority === "medium" ? "selected" : ""}>Medium</option>
+                <option value="high" ${task.priority === "high" ? "selected" : ""}>High</option>
+            </select>
+        `;
+        document.getElementById('hours-info').innerHTML = `<input type="number" id="edit-hours" value="${task.hours}">`;
+        document.getElementById('difficulty-info').innerHTML = `<input type="number" id="edit-difficulty" value="${task.difficulty}">`;
 
-        // Закриваємо модальне вікно інформації
-        infoModal.style.display = 'none';
-
-        // Відкриваємо модальне вікно редагування
-        openModal('taskModal');
+        let editBtn = document.querySelector(".btn-edit");
+        editBtn.textContent = "Save";
+        editBtn.setAttribute("onclick", "saveTaskEdits()");
     }
-
 }
 
-// Функція для створення рядків таблиці
+async function saveTaskEdits() {
+    let taskId = editingTaskId;
+
+    let taskData = {
+        task_id: taskId,
+        name: document.getElementById("edit-task-name").value.trim(),
+        start: document.getElementById("edit-start-date").value,
+        deadline: document.getElementById("edit-deadline").value,
+        completion: document.getElementById("edit-end-date").value,
+        priority: document.getElementById("edit-priority").value,
+        hours: document.getElementById("edit-hours").value,
+        difficulty: document.getElementById("edit-difficulty").value,
+        members: document.getElementById("edit-members").value
+    };
+
+    try {
+        let response = await fetch("/api/update-task/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify(taskData)
+        });
+
+        let data = await response.json();
+        if (data.message) {
+            let task = currentProject.tasks.find(t => t.id == taskId);
+            if (task) {
+                task.name = taskData.name;
+                task.start = taskData.start;
+                task.deadline = taskData.deadline;
+                task.completion = taskData.completion;
+                task.priority = taskData.priority;
+                task.hours = taskData.hours;
+                task.difficulty = taskData.difficulty;
+                task.members = taskData.members;
+            }
+
+            resetTaskInfoModal(task);
+
+            setTimeout(() => closeModal("infoModal"), 300); 
+
+            editingTaskId = null;
+
+            loadProject();
+        } else {
+            alert("Error: " + data.error);
+        }
+    } catch (error) {
+        console.error("Помилка оновлення таску:", error);
+    }
+}
+
+function resetTaskInfoModal(task) {
+    if (!task) return;
+
+    document.getElementById('task-name-info').innerHTML = task.name;
+    document.getElementById('start-date-info').innerHTML = formatDate(task.start);
+    document.getElementById('deadline-info').innerHTML = formatDate(task.deadline);
+    document.getElementById('end-date-info').innerHTML = task.completion ? formatDate(task.completion) : "No value";
+    document.getElementById('members-info').innerHTML = task.members || "No value";
+    document.getElementById('priority-info').innerHTML = task.priority;
+    document.getElementById('hours-info').innerHTML = task.hours;
+    document.getElementById('difficulty-info').innerHTML = task.difficulty;
+
+    let editBtn = document.querySelector(".btn-edit");
+    editBtn.textContent = "Edit";
+    editBtn.setAttribute("onclick", "editTask()");
+}
+
 function createTaskRows() {
     const taskTableBody = document.querySelector('#taskTable tbody');
 
     tasks.forEach(task => {
         const row = document.createElement('tr');
 
-        // Створення клітинок для кожного завдання
         const taskCell = document.createElement('td');
         taskCell.classList.add('task-name');
         taskCell.innerText = task.name;
 
-        // Додаємо обробник кліку для відкриття модального вікна
         taskCell.onclick = function() {
-            openInfoModal(task);  // Відкривається модальне вікно при натисканні
+            openInfoModal(task);  
         };
 
         const startDateCell = document.createElement('td');
@@ -519,44 +553,36 @@ function createTaskRows() {
         const membersCell = document.createElement('td');
         membersCell.innerText = task.members;
 
-        // Додаємо клітинки до рядка
         row.appendChild(taskCell);
         row.appendChild(startDateCell);
         row.appendChild(deadlineCell);
         row.appendChild(endDateCell);
         row.appendChild(membersCell);
 
-        // Додаємо рядок до таблиці
         taskTableBody.appendChild(row);
     });
 }
 
-// Викликаємо функцію після завантаження сторінки, щоб додати завдання в таблицю
 document.addEventListener('DOMContentLoaded', createTaskRows);
-// Показати модальне вікно з інформацією про завдання
 function showModal(event) {
     const modal = document.getElementById("infoModal");
      const taskItem = event.target;
 
-    // Отримуємо дані про завдання з атрибутів
     const taskName = taskItem.getAttribute("data-task-name");
     const startDate = taskItem.getAttribute("data-start-date");
     const deadline = taskItem.getAttribute("data-deadline");
     const endDate = taskItem.getAttribute("data-end-date");
     const members = taskItem.getAttribute("data-members");
 
-    // Заповнюємо дані в модальному вікні
     document.getElementById("task-name-info").textContent = taskName;
     document.getElementById("start-date-info").textContent = startDate;
     document.getElementById("deadline-info").textContent = deadline;
     document.getElementById("end-date-info").textContent = endDate;
     document.getElementById("members-info").textContent = members;
 
-    // Показуємо модальне вікно
     modal.style.display = "flex";
 }
 
-// Приховуємо модальне вікно
 function hideModal() {
     const modal = document.getElementById("infoModal");
     modal.style.display = "none";
@@ -566,7 +592,7 @@ function hideModal() {
 document.querySelectorAll(".task-item").forEach(taskItem => {
     taskItem.addEventListener("click", showModal);
 });
-// Приховуємо модальне вікно
+
 function hideModal() {
     const modal = document.getElementById("infoModal");
     modal.style.display = "none";
@@ -604,7 +630,6 @@ async function deleteTask() {
     }
 }
 
-// Функція для видалення рядка завдання в таблиці
 function removeTaskRow(taskId) {
     const row = document.querySelector(`tr[data-task-id='${taskId}']`);
     if (row) {
@@ -615,3 +640,52 @@ function removeTaskRow(taskId) {
 function hideModal() {
     document.getElementById('infoModal').style.display = 'none';
 }
+
+async function updateTask() {
+    let taskId = editingTaskId;  
+
+    let taskData = {
+        task_id: taskId,
+        name: document.getElementById("task-name").value.trim(),
+        start: document.getElementById("start-date").value,
+        deadline: document.getElementById("deadline").value,
+        completion: document.getElementById("end-date").value,
+        priority: document.getElementById("priority").value,
+        hours: document.getElementById("hours").value,
+        difficulty: document.getElementById("difficulty").value,
+        members: document.getElementById("members").value
+    };
+
+    try {
+        let response = await fetch("/api/update-task/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify(taskData)
+        });
+
+        let data = await response.json();
+        if (data.message) {
+            fetchProjects(() => {
+                closeModal("taskModal");
+                loadProject();
+            });
+        } else {
+            alert("Error: " + data.error);
+        }
+    } catch (error) {
+        console.error("Помилка оновлення таску:", error);
+    }
+}
+
+document.getElementById("saveTask").addEventListener("click", function(event) {
+    event.preventDefault();
+    if (editingTaskId) {
+        updateTask();
+        editingTaskId = null;
+    } else {
+        createTask();
+    }
+});
