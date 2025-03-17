@@ -463,7 +463,6 @@ function openInfoModal(task) {
 }
 
 let editingTaskId = null;
-
 function editTask() {
     let infoModal = document.getElementById('infoModal');
     let taskId = infoModal.getAttribute('data-task-id'); // Отримуємо ID завдання
@@ -474,51 +473,23 @@ function editTask() {
 
         // Заповнюємо форму редагування
         document.getElementById('task-name').value = task.name;
-        document.getElementById('start-date').value = task.start ? task.start.toISOString().split('T')[0] : "";
-        document.getElementById('deadline').value = task.deadline ? task.deadline.toISOString().split('T')[0] : "";
-        document.getElementById('end-date').value = task.completion ? task.completion.toISOString().split('T')[0] : "";
-        document.getElementById('members').value = task.members.join(", ");
+        document.getElementById('start-date').value = task.start.toISOString().split('T')[0];
+        document.getElementById('deadline').value = task.deadline.toISOString().split('T')[0];
+        document.getElementById('end-date').value = task.completion.toISOString().split('T')[0];
+        document.getElementById('members').value = task.members;
         document.getElementById('priority').value = task.priority;
         document.getElementById('hours').value = task.hours;
         document.getElementById('difficulty').value = task.difficulty;
 
-        // Закриваємо старе модальне вікно та відкриваємо нове
+        // Закриваємо модальне вікно інформації
         infoModal.style.display = 'none';
+
+        // Відкриваємо модальне вікно редагування
         openModal('taskModal');
     }
+
 }
 
-async function saveTaskChanges() {
-    let taskId = editingTaskId;
-    let taskData = {
-        task_id: taskId,
-        name: document.getElementById('task-name').value,
-        start: document.getElementById('start-date').value,
-        deadline: document.getElementById('deadline').value,
-        completion: document.getElementById('end-date').value,
-        members: document.getElementById('members').value.split(",").map(member => member.trim()),
-        priority: document.getElementById('priority').value,
-        hours: document.getElementById('hours').value,
-        difficulty: document.getElementById('difficulty').value
-    };
-
-    const response = await fetch('/api/update-task/', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(taskData)
-    });
-
-    if (!response.ok) {
-        const errorData = await response.json();
-        alert(`Помилка: ${errorData.error}`);
-        return;
-    }
-
-    alert("Завдання оновлено!");
-    location.reload();
-}
 // Функція для створення рядків таблиці
 function createTaskRows() {
     const taskTableBody = document.querySelector('#taskTable tbody');

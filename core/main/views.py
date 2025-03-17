@@ -25,28 +25,24 @@ def update_task(request):
             data = json.loads(request.body)
             task_id = data.get("task_id")
 
+            # Перевірка чи існує задача з таким ID
             task = Task.objects.filter(id=task_id).first()
             if not task:
                 return JsonResponse({"error": "Task not found."}, status=404)
 
-            # Конвертація дат у правильний формат
-            start_date = datetime.strptime(data.get("start"), "%Y-%m-%d").date() if data.get("start") else task.start_date
-            deadline = datetime.strptime(data.get("deadline"), "%Y-%m-%d").date() if data.get("deadline") else task.deadline
-            end_date = datetime.strptime(data.get("completion"), "%Y-%m-%d").date() if data.get("completion") else task.end_date
-
-            # Оновлення полів завдання
-            task.name = data.get("name", task.name)
-            task.start_date = start_date
-            task.deadline = deadline
-            task.end_date = end_date
-            task.priority = data.get("priority", task.priority)
-            task.hours = data.get("hours", task.hours)
-            task.difficulty = data.get("difficulty", task.difficulty)
-            task.save()
+            # Оновлення даних задачі
+            Task.objects.filter(id=task_id).update(
+                name=data.get("name", task.name),
+                start_date=data.get("start", task.start_date),
+                deadline=data.get("deadline", task.deadline),
+                end_date=data.get("completion", task.end_date),
+                priority=data.get("priority", task.priority),
+                hours=data.get("hours", task.hours),
+                difficulty=data.get("difficulty", task.difficulty)
+            )
 
             # Оновлення учасників
-            member_usernames = [m.strip() for m in data.get("members", "").split(",") if m.strip()]
-            task.members.set(User.objects.filter(username__in=member_usernames))
+            task.members.set(User.objects.filter(username__in=data.get("members", "").split(",")))
 
             return JsonResponse({"message": "Task updated successfully!"})
 
