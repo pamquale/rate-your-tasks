@@ -1,65 +1,104 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Кругова діаграма (Meeting Deadlines)
-    const pieCtx = document.getElementById('pieChart').getContext('2d');
-    new Chart(pieCtx, {
-        type: 'doughnut',
+    fetchAnalyticsData();
+    document.getElementById("projectSelect").addEventListener("change", function () {
+        fetchAnalyticsData();
+    });
+});
+
+let chartInstances = {}; 
+
+async function fetchAnalyticsData() {
+    let projectId = document.getElementById("projectSelect").value;
+    if (!projectId) return;
+
+    try {
+        let response = await fetch(`/api/analytics/?project_id=${projectId}`);
+        let data = await response.json();
+
+        console.log("📊 Отримані аналітичні дані:", data);
+
+        if (!data.length) {
+            console.warn("⚠️ Аналітичні дані відсутні або помилка API");
+            clearCharts();
+            return;
+        }
+
+        let labels = data.map(item => item.task__name);
+        let completedData = data.map(item => item.completed_on_time ? 1 : 0);
+        let workloadData = data.map(item => item.workload);
+
+        clearCharts();
+        renderPieChart(completedData);
+        renderBarChart(workloadData, labels);
+        renderLineChart(workloadData, labels);
+    } catch (error) {
+        console.error("❌ Помилка отримання аналітичних даних:", error);
+    }
+}
+
+function clearCharts() {
+    Object.keys(chartInstances).forEach(chart => {
+        if (chartInstances[chart]) {
+            chartInstances[chart].destroy(); 
+        }
+    });
+}
+
+function renderPieChart(completedData) {
+    let pieCtx = document.getElementById("pieChart").getContext("2d");
+    if (chartInstances["pieChart"]) chartInstances["pieChart"].destroy();
+
+    chartInstances["pieChart"] = new Chart(pieCtx, {
+        type: "doughnut",
         data: {
-            labels: ['Completed on time', 'Ahead of schedule', 'Overdue task'],
+            labels: ["Completed on time", "Not completed on time"],
             datasets: [{
-                data: [40, 30, 30], // Відсотки
-                backgroundColor: ['yellow', 'green', 'red']
+                data: [
+                    completedData.filter(v => v === 1).length,
+                    completedData.filter(v => v === 0).length
+                ],
+                backgroundColor: ["green", "red"]
             }]
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: { position: 'bottom' }
-            },
-            cutout: '70%' // Зменшуємо розмір внутрішнього кола (можна коригувати)
+            plugins: { legend: { position: "bottom" } }
         }
     });
+}
 
-    // Стовпчикова діаграма (Task Load Distribution)
-    const barCtx1 = document.getElementById('barChart1').getContext('2d');
-    const taskData = [8, 6, 9, 5, 7];
+function renderBarChart(workloadData, labels) {
+    let barCtx = document.getElementById("barChart1").getContext("2d");
+    if (chartInstances["barChart1"]) chartInstances["barChart1"].destroy();
 
-    const taskColors = taskData.map(task => {
-        if (task >= 8 && task <= 10) {
-            return "green";
-        } else if (task >= 4 && task < 8) {
-            return "yellow";
-        } else {
-            return "red";
-        }
-    });
-
-    new Chart(barCtx1, {
-        type: 'bar',
+    chartInstances["barChart1"] = new Chart(barCtx, {
+        type: "bar",
         data: {
-            labels: ['01.01', '02.01', '03.01', '04.01', '05.01'],
+            labels: labels,
             datasets: [{
-                label: 'Tasks',
-                data: taskData, // Встановлюємо значення для стовпців
-                backgroundColor: taskColors // Задаємо кольори стовпців
+                label: "Workload (hours)",
+                data: workloadData,
+                backgroundColor: "blue"
             }]
         },
         options: {
             responsive: true,
-            scales: {
-                y: { beginAtZero: true, max: 10 }
-            }
+            scales: { y: { beginAtZero: true } }
         }
     });
+}
 
-    // Лінійний графік (Task schedule by number of hours)
-    const lineCtx = document.getElementById("lineChart").getContext("2d");
-    new Chart(lineCtx, {
+function renderLineChart(workloadData, labels) {
+    let lineCtx = document.getElementById("lineChart").getContext("2d");
+    if (chartInstances["lineChart"]) chartInstances["lineChart"].destroy();
+
+    chartInstances["lineChart"] = new Chart(lineCtx, {
         type: "line",
         data: {
-            labels: ["01.01", "02.01", "03.01", "04.01", "05.01", "06.01", "07.01", "08.01", "09.01", "10.01"],
+            labels: labels,
             datasets: [{
                 label: "Hours worked",
-                data: [5, 6, 7, 4, 8, 5, 6, 7, 3, 6], // Дані для графіка
+                data: workloadData,
                 borderColor: "black",
                 backgroundColor: "rgba(0, 0, 0, 0.1)",
                 borderWidth: 2,
@@ -70,56 +109,16 @@ document.addEventListener("DOMContentLoaded", function () {
             }]
         },
         options: {
+            responsive: true,
             scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: "Date",
-                    }
-                },
+                x: { title: { display: true, text: "Tasks" } },
                 y: {
-                    title: {
-                        display: true,
-                        text: "Hours Worked",
-                    },
+                    title: { display: true, text: "Hours Worked" },
                     suggestedMin: 0,
-                    suggestedMax: 8,
-                    ticks: {
-                        stepSize: 1
-                    }
+                    suggestedMax: Math.max(...workloadData) + 2,
+                    ticks: { stepSize: 1 }
                 }
             }
         }
     });
-
-    // Стовпчикова діаграма для оцінок з обмеженнями по кольору
-    const barCtx2 = document.getElementById('barChart2').getContext('2d');
-    const scores = [6, 5, 4, 9, 7, 5, 8, 3, 8, 9];
-    const colors = scores.map(score => {
-        if (score >= 8 && score <= 10) {
-            return "green";
-        } else if (score >= 4 && score < 8) {
-            return "yellow";
-        } else {
-            return "red";
-        }
-    });
-
-    new Chart(barCtx2, {
-        type: "bar",
-        data: {
-            labels: ["John", "Sara", "Mike", "Emma", "David", "Alex", "Olivia", "James", "Lily", "Sophia"],
-            datasets: [{
-                label: "Оцінка",
-                data: scores, // Оцінки
-                backgroundColor: colors // Використовуємо масив кольорів
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true, max: 10 }
-            }
-        }
-    });
-});
+}

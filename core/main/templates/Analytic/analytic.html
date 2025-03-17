@@ -16,39 +16,31 @@
     {% include "includes/sidebar.html" %}
 
     <div class="content">
-        <!-- Верхня панель з вибором проєкту -->
         <div class="top-bar">
             <select id="projectSelect">
-                <option value="Project A">Project A</option>
-                <option value="Project B">Project B</option>
-                <option value="Project C">Project C</option>
+                {% for project in projects %}
+                    <option value="{{ project.id }}">{{ project.title }}</option>
+                {% endfor %}
             </select>
         </div>
 
-        <!-- Контейнер для всіх графіків -->
         <div class="dashboard-wrapper">
 
-            <!-- Горизонтальна лінія -->
             <div class="divider-horizontal"></div>
 
-            <!-- Вертикальна лінія -->
             <div class="divider-vertical"></div>
 
-            <!-- Сітка для організації графіків -->
             <div class="dashboard">
-                <!-- Кругова діаграма -->
                 <div class="pie-chart">
                     <h2 class="chart-title">Meeting Deadlines</h2>
                     <canvas id="pieChart"></canvas>
                 </div>
 
-                <!-- Стовпчикова діаграма -->
                 <div class="bar-chart">
                     <h3 class="chart-title">Task Load Distribution</h3>
                     <canvas id="barChart1"></canvas>
                 </div>
 
-                <!-- Лінійний графік -->
                 <div class="line-chart">
                     <h2 class="chart-title">Task schedule by number of hours</h2>
                     <canvas id="lineChart"></canvas>
@@ -57,9 +49,16 @@
 
         </div>
     </div>
-    <!-- Підключення скрипта -->
+    <script>
+        const analyticsData = {{ analytics_data|safe }};
+    </script>
+
     <script src="{% static 'main/js/script_analytic.js' %}"></script>
     <script src="{% static 'main/js/script_sidebar.js' %}"></script>
+    <script>
+        const analyticsData = JSON.parse('{{ analytics_data|safe|escapejs }}');
+        console.log("📊 Аналітичні дані у шаблоні:", analyticsData);
+    </script>    
 
 </body>
 </html>

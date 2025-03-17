@@ -222,7 +222,7 @@ async function createTask() {
         return;
     }
 
-    taskForm.dataset.submitted = "true"; 
+    taskForm.dataset.submitted = "true";
 
     let taskData = {
         project_id: currentProject.id,
@@ -252,9 +252,16 @@ async function createTask() {
         console.log("Відповідь від сервера:", data);
 
         if (data.task_id) {
+            await saveTaskAnalytics({
+                id: data.task_id,
+                completion: taskData.completion,
+                deadline: taskData.deadline,
+                hours: taskData.hours
+            });
+
             fetchProjects(() => {
                 closeModal("taskModal");
-                loadProject(); 
+                loadProject();
                 updateTableRange();
             });
         } else {
@@ -263,10 +270,37 @@ async function createTask() {
     } catch (error) {
         console.error("Помилка запиту:", error);
     } finally {
-        taskForm.dataset.submitted = ""; 
+        taskForm.dataset.submitted = "";
     }
 }
 
+async function saveTaskAnalytics(task) {
+    const analyticsData = {
+        task_id: task.id,
+        completed_on_time: task.completion ? new Date(task.completion) <= new Date(task.deadline) : false,
+        workload: task.hours
+    };
+
+    try {
+        let response = await fetch("/api/save-analytics/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify(analyticsData)
+        });
+
+        let data = await response.json();
+        if (data.message) {
+            console.log("Аналітичні дані успішно збережено");
+        } else {
+            console.error("Помилка збереження аналітики:", data.error);
+        }
+    } catch (error) {
+        console.error("Помилка запиту:", error);
+    }
+}
 
 function clearTaskForm() {
     document.getElementById("task-name").value = "";
@@ -358,14 +392,29 @@ function drawTable() {
 }
 
 function renderTaskRow(task) {
-    let row = document.querySelector(`tr[data-task-id='${task.id}']`);
-    if (!row) {
-        row = document.createElement("tr");
-        row.setAttribute("data-task-id", task.id);
-        document.getElementById("taskTable").appendChild(row);
+    let taskTable = document.getElementById("taskTable");
+    let rows = taskTable.getElementsByTagName("tr");
+
+    let emptyRowIndex = -1;
+    for (let i = 0; i < rows.length; i++) {
+        if (!rows[i].hasAttribute("data-task-id")) {
+            emptyRowIndex = i;
+            break;
+        }
     }
 
-    row.innerHTML = "";
+    let row;
+    if (emptyRowIndex !== -1) {
+        row = rows[emptyRowIndex];
+        row.setAttribute("data-task-id", task.id);
+    } else {
+        row = document.createElement("tr");
+        row.setAttribute("data-task-id", task.id);
+        taskTable.appendChild(row);
+    }
+
+    row.innerHTML = ""; 
+
     let taskNameCell = document.createElement("td");
     taskNameCell.textContent = task.name;
     row.appendChild(taskNameCell);
@@ -373,7 +422,7 @@ function renderTaskRow(task) {
     let projectStart = new Date(currentProject.startDate);
     let taskStart = new Date(task.start);
     let taskDeadline = new Date(task.deadline);
-    let taskCompletion = new Date(task.completion);
+    let taskCompletion = task.completion ? new Date(task.completion) : null;
 
     let dateHeaders = document.querySelectorAll("#dateHeader th");
     let daysCount = dateHeaders.length - 1;
@@ -387,12 +436,12 @@ function renderTaskRow(task) {
         if (currentDate >= taskStart && currentDate <= taskDeadline) {
             taskBar.classList.add("yellow");
         }
-        if (currentDate >= taskStart && currentDate <= taskCompletion) {
+        if (taskCompletion && currentDate >= taskStart && currentDate <= taskCompletion) {
             let greenBar = document.createElement("div");
             greenBar.classList.add("green");
             taskBar.appendChild(greenBar);
         }
-        if (currentDate > taskDeadline && currentDate <= taskCompletion) {
+        if (taskCompletion && currentDate > taskDeadline && currentDate <= taskCompletion) {
             taskBar.classList.add("red");
         }
 

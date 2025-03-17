@@ -163,7 +163,6 @@ def save_task(request):
                 difficulty=difficulty
             )
 
-            # Додаємо учасників завдання
             task.members.set(User.objects.filter(username__in=members.split(",")))
 
             return JsonResponse({"message": "Task saved successfully!", "task_id": str(task.id)})
@@ -173,8 +172,20 @@ def save_task(request):
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+@login_required
 def get_analytics_data(request):
-    analytics = TaskAnalytics.objects.all().values("task__name", "completed_on_time", "workload")
+    project_id = request.GET.get("project_id")
+    
+    if not project_id:
+        return JsonResponse({"error": "Project ID is required"}, status=400)
+
+    analytics = TaskAnalytics.objects.filter(task__project_id=project_id).values(
+        "task__name", "completed_on_time", "workload"
+    )
+
+    if not analytics:
+        return JsonResponse({"error": "No analytics data found"}, status=404)
+
     return JsonResponse(list(analytics), safe=False)
 
 @csrf_exempt
@@ -183,10 +194,11 @@ def save_analytics_data(request):
         try:
             data = json.loads(request.body)
             task_id = data.get("task_id")
-            completed_on_time = data.get("completed_on_time")
             workload = data.get("workload")
 
             task = Task.objects.get(id=task_id)
+            completed_on_time = task.end_date and task.end_date <= task.deadline
+
             analytics, created = TaskAnalytics.objects.update_or_create(
                 task=task,
                 defaults={"completed_on_time": completed_on_time, "workload": workload}
@@ -223,7 +235,15 @@ def DiagramView(request):
 
 @login_required
 def AnalitycView(request):
-    return render(request, 'Analytic/analytic.html')
+    projects = Project.objects.filter(owner=request.user)
+    analytics = TaskAnalytics.objects.filter(task__project__owner=request.user).values(
+        "task__name", "completed_on_time", "workload"
+    )
+
+    return render(request, 'Analytic/analytic.html', {
+        'projects': projects,
+        'analytics_data': list(analytics)
+    })
 
 @login_required
 def ProfileView(request):

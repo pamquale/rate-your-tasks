@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import get_analytics_data
 
 urlpatterns = [
     path('', views.Home, name="home"),
@@ -17,6 +18,7 @@ urlpatterns = [
      path('api/save-task/', views.save_task, name="save_task"),
      path('api/update-task/', views.update_task, name="update_task"),
      path('api/delete-task/', views.delete_task, name="delete_task"),
+     path('api/analytics/', get_analytics_data, name='get_analytics_data'),
      path('analytic/', views.AnalitycView, name="analytic"),
      path('profile/', views.ProfileView, name="profile"),
 
