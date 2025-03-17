@@ -12,6 +12,11 @@ urlpatterns = [
     path('reset-password/<str:reset_id>/',
          views.ResetPassword, name='reset-password'),
      path('diagram/', views.DiagramView, name="diagram"),
+     path('api/save-project/', views.save_project, name="save_project"),
+     path('api/projects/', views.get_projects, name="get_projects"),
+     path('api/save-task/', views.save_task, name="save_task"),
+     path('api/update-task/', views.update_task, name="update_task"),
+     path('api/delete-task/', views.delete_task, name="delete_task"),
      path('analytic/', views.AnalitycView, name="analytic"),
      path('profile/', views.ProfileView, name="profile"),
 

@@ -12,9 +12,168 @@ from .models import PasswordReset
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import Task, GanttChart, TaskAnalytics
+from .models import Task, GanttChart, TaskAnalytics, Project
+from datetime import datetime
 
 User = get_user_model()
+
+@csrf_exempt
+@login_required
+def update_task(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            task_id = data.get("task_id")
+
+            # Перевірка чи існує задача з таким ID
+            task = Task.objects.filter(id=task_id).first()
+            if not task:
+                return JsonResponse({"error": "Task not found."}, status=404)
+
+            # Оновлення даних задачі
+            Task.objects.filter(id=task_id).update(
+                name=data.get("name", task.name),
+                start_date=data.get("start", task.start_date),
+                deadline=data.get("deadline", task.deadline),
+                end_date=data.get("completion", task.end_date),
+                priority=data.get("priority", task.priority),
+                hours=data.get("hours", task.hours),
+                difficulty=data.get("difficulty", task.difficulty)
+            )
+
+            # Оновлення учасників
+            task.members.set(User.objects.filter(username__in=data.get("members", "").split(",")))
+
+            return JsonResponse({"message": "Task updated successfully!"})
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+@csrf_exempt
+@login_required
+def delete_task(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            task_id = data.get("task_id")
+
+            task = Task.objects.get(id=task_id)
+            task.delete()
+
+            return JsonResponse({"message": "Task deleted successfully!"})
+
+        except Task.DoesNotExist:
+            return JsonResponse({"error": "Task not found."}, status=404)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+@csrf_exempt
+@login_required
+def save_project(request):
+    """Збереження нового проєкту в БД через AJAX"""
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            title = data.get("title")
+            start_date_str = data.get("start_date")  # Отримуємо дату у вигляді рядка
+
+            if not title or not start_date_str:
+                return JsonResponse({"error": "Project title and start date are required."}, status=400)
+
+            # Перетворюємо рядок у datetime
+            start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+
+            # Створюємо новий проєкт у базі
+            project = Project.objects.create(
+                title=title,
+                start_date=start_date,
+                owner=request.user
+            )
+
+            return JsonResponse({
+                "message": "Project saved successfully!",
+                "project": {
+                    "id": str(project.id),
+                    "title": project.title,
+                    "start_date": project.start_date.strftime("%Y-%m-%d"),  # Тепер працює
+                }
+            })
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+@login_required
+def get_projects(request):
+    """ Отримати список проєктів із завданнями """
+    projects = Project.objects.filter(owner=request.user).prefetch_related("tasks")
+    projects_data = [
+        {
+            "id": str(project.id),
+            "title": project.title,
+            "start_date": project.start_date.strftime("%Y-%m-%d"),
+            "tasks": [
+                {
+                    "id": str(task.id),
+                    "name": task.name,
+                    "start": task.start_date.strftime("%Y-%m-%d"),
+                    "deadline": task.deadline.strftime("%Y-%m-%d"),
+                    "completion": task.end_date.strftime("%Y-%m-%d") if task.end_date else None,
+                    "priority": task.priority,
+                    "hours": task.hours,
+                    "difficulty": task.difficulty,
+                    "members": ", ".join([member.username for member in task.members.all()])
+                }
+                for task in project.tasks.all()
+            ],
+        }
+        for project in projects
+    ]
+    return JsonResponse({"projects": projects_data})
+
+@csrf_exempt
+@login_required
+def save_task(request):
+    """ Додавання нового завдання через AJAX """
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            project_id = data.get("project_id")
+            name = data.get("name")
+            start_date = data.get("start")
+            deadline = data.get("deadline")
+            completion = data.get("completion")
+            priority = data.get("priority")
+            hours = data.get("hours")
+            difficulty = data.get("difficulty")
+            members = data.get("members")
+
+            project = Project.objects.get(id=project_id, owner=request.user)
+            task = Task.objects.create(
+                project=project,
+                name=name,
+                start_date=start_date,
+                deadline=deadline,
+                end_date=completion,
+                priority=priority,
+                hours=hours,
+                difficulty=difficulty
+            )
+
+            # Додаємо учасників завдання
+            task.members.set(User.objects.filter(username__in=members.split(",")))
+
+            return JsonResponse({"message": "Task saved successfully!", "task_id": str(task.id)})
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 def get_analytics_data(request):
     analytics = TaskAnalytics.objects.all().values("task__name", "completed_on_time", "workload")
