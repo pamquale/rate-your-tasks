@@ -21,22 +21,16 @@
         <!-- Модальне вікно -->
         <div id="changeDataModal" class="ChangeData" style="display: none;">
             <div class="Title">Change data</div>
-
-            <div class="NameSurnameUsername">
-                <span class="name">{{ user.first_name }} {{ user.last_name }}</span>
-                <span class="username">{{ user.username }}</span>
-            </div>
-            <div class="Position">Position: {{ user.position }}</div>
-            <div class="TeamRole">Team Role: {{ user.team_role }}</div>
-            <div class="Company">Company: {{ user.company }}</div>
-            <div class="UserLocation">📍{{ user.location }}</div>
-            <div class="WorkExperience">Work experience: {{ user.work_experience }}</div>
-            <div class="KeyTechnologies">Key technologies: {{ user.key_technologies }}</div>
-            <div class="Contacts">Contacts: {{ user.contacts }}</div>
-            
-
-            <button class="SaveButton" id="saveButton">Save</button>
-        </div>
+            <input type="text" id="position" placeholder="Enter position">
+            <input type="text" id="teamRole" placeholder="Enter team role">
+            <input type="text" id="company" placeholder="Enter company">
+            <input type="text" id="location" placeholder="Enter location">
+            <input type="text" id="workExperience" placeholder="Enter work experience">
+            <input type="text" id="keyTechnologies" placeholder="Enter key technologies">
+            <input type="text" id="contacts" placeholder="Enter contacts">
+            <button id="saveButton" class="SaveButton">Save</button>
+            <button id="closeModal" class="CloseButton">Close</button>
+        </div>        
 
         <!-- Профіль -->
         <section class="Profile">
